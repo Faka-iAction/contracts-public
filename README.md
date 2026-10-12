@@ -6,7 +6,18 @@ Repository: `Faka-iAction/contracts-public` (FAKA iAction platform, Contracts co
 
 ## Status
 
-Scaffold only. Nothing is implemented yet.
+Documentation only. Nothing is implemented yet. This repository does not contain any contract files yet. They are planned for publication at roadmap milestone M1.
+
+## Contents
+
+| File | What it covers |
+|---|---|
+| [CONTRACT_FIRST.md](CONTRACT_FIRST.md) | What contract-first means in this project, why four backends share one contract, how conformance tests will work, and when the contracts will be published. |
+
+Related repositories:
+
+- [docs-public](https://github.com/Faka-iAction/docs-public) — plain-language introduction, scope of the first release, [roadmap](https://github.com/Faka-iAction/docs-public/blob/main/ROADMAP.md) and glossary.
+- [architecture-public](https://github.com/Faka-iAction/architecture-public) — the architecture overview and design decisions.
 
 ## Visibility
 
