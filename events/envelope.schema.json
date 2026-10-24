@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:faka-iaction:contracts:events:envelope:1",
+  "title": "FAKA iAction event envelope",
+  "description": "Envelope carried by every FAKA iAction domain event. The envelope is the same for all events; the shape of `payload` is defined per event type and schema version in its own schema. Events are projections and delivery mechanisms; the shared database and the financial ledger remain the source of truth.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "eventId",
+    "eventType",
+    "schemaVersion",
+    "aggregateType",
+    "aggregateId",
+    "aggregateVersion",
+    "occurredAt",
+    "correlationId",
+    "causationId",
+    "producer",
+    "payload"
+  ],
+  "properties": {
+    "eventId": {
+      "description": "Unique, opaque identifier of this event. It is the deduplication key: a consumer that has already processed an eventId must not apply it again.",
+      "$ref": "#/$defs/opaqueId"
+    },
+    "eventType": {
+      "description": "Name of the event: the aggregate followed by a past-tense verb, in PascalCase, for example `MemberRegistered`. See README.md for the naming rules.",
+      "type": "string",
+      "pattern": "^[A-Z][A-Za-z0-9]{2,79}$"
+    },
+    "schemaVersion": {
+      "description": "Version of the payload schema for this eventType. A positive integer that starts at 1 and increases only when the payload changes incompatibly.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "aggregateType": {
+      "description": "Type of the aggregate the event is about, in PascalCase, for example `Member` or `CreatorProfile`.",
+      "type": "string",
+      "pattern": "^[A-Z][A-Za-z0-9]{1,49}$"
+    },
+    "aggregateId": {
+      "description": "Opaque public identifier of the aggregate instance. Never a sequential database key.",
+      "$ref": "#/$defs/opaqueId"
+    },
+    "aggregateVersion": {
+      "description": "Version of the aggregate after the change this event records. It increases by one for each event of the same aggregate instance, starting at 1. Consumers use it, not occurredAt, to order events of one aggregate and to detect gaps and duplicates.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "occurredAt": {
+      "description": "When the change happened, as an ISO 8601 / RFC 3339 instant in UTC with the `Z` suffix. Informational: it must not be used to order events.",
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?Z$"
+    },
+    "correlationId": {
+      "description": "Correlation ID of the request or job that led to this event. The same value as the API's X-Correlation-Id, carried through every event the request causes.",
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_\\-:.]+$"
+    },
+    "causationId": {
+      "description": "eventId of the event that directly caused this one, or null when the event was caused directly by an API request, a scheduled job or an operator action.",
+      "oneOf": [
+        { "$ref": "#/$defs/opaqueId" },
+        { "type": "null" }
+      ]
+    },
+    "producer": {
+      "description": "Name of the component that produced the event, for example `api-symfony`. It identifies an implementation, not a host: it must not contain host names, addresses or other infrastructure details.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9\\-]{1,49}$"
+    },
+    "payload": {
+      "description": "Event-specific data, defined by the schema for this eventType and schemaVersion. It carries the minimum a consumer needs and is privacy-reviewed: no credentials, tokens, payment credentials or unnecessary personal data. Sensitive data is referenced by identifier rather than included.",
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "opaqueId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9_\\-]+$"
+    }
+  },
+  "examples": [
+    {
+      "eventId": "01JA8R4N6P8Q0S2T4V6W8X0Y2Z",
+      "eventType": "CreatorProfileCreated",
+      "schemaVersion": 1,
+      "aggregateType": "CreatorProfile",
+      "aggregateId": "01JA8PZK3M9R5T7V1X2Y4Z6A8B",
+      "aggregateVersion": 1,
+      "occurredAt": "2026-10-12T08:05:00Z",
+      "correlationId": "01JA8Q2M5T7W9X3B6C4D8E0F1G",
+      "causationId": null,
+      "producer": "api-symfony",
+      "payload": {}
+    }
+  ]
+}

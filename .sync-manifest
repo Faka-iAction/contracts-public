@@ -1,0 +1,9 @@
+# Files mirrored from the private Faka-iAction/contracts repository at d7fa187
+# by tools/sync-public. Every listed file is replaced on the next sync; files not listed
+# belong to this public repository and are never touched by the mirror.
+domain/domain-model.md
+domain/state-machines.md
+events/README.md
+events/envelope.schema.json
+openapi/CONVENTIONS.md
+openapi/faka-v1.yaml
