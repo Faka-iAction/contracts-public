@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: FAKA iAction Platform API
-  version: 1.0.0-alpha.4
+  version: 1.0.0-alpha.5
   summary: Contract for the FAKA iAction platform API (MVP1 draft).
   description: |
     Contract-first HTTP API for the FAKA iAction platform. FAKA iAction is the
@@ -8774,6 +8774,102 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedParticipant'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+
+  /me/creator-profile/image:
+    put:
+      operationId: putOwnCreatorImage
+      tags: [Creator Profile]
+      summary: Set the signed-in creator's profile image
+      description: |
+        The request body is the image itself, as `image/jpeg`, `image/png` or
+        `image/webp`, at most 5 MB. The server checks that it is an image of
+        that kind and redraws it as a JPEG of at most 1024 pixels a side, so
+        nothing of the original file (metadata, embedded content) is kept.
+        The image replaces any earlier one, which is deleted.
+
+        `imageUrl` in the response is where the image is served. The URL
+        changes every time the image changes, so clients may cache it for
+        as long as they like.
+
+        Another content type is `422` with field code `INVALID_TYPE` on
+        `body`; a body that is not a readable image of the stated kind, or
+        is too large, is `422` with field code `INVALID_FORMAT`. `503` means
+        file storage is unavailable; the old image is kept. `404` with
+        `CREATOR_PROFILE_NOT_FOUND` when the caller is not a creator.
+      parameters:
+        - $ref: '#/components/parameters/CorrelationIdHeader'
+      requestBody:
+        required: true
+        content:
+          image/jpeg:
+            schema:
+              type: string
+              format: binary
+          image/png:
+            schema:
+              type: string
+              format: binary
+          image/webp:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: The creator profile with its new `imageUrl`.
+          headers:
+            X-Correlation-Id:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatorProfile'
+              examples:
+                profile:
+                  $ref: '#/components/examples/CreatorProfileExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    delete:
+      operationId: deleteOwnCreatorImage
+      tags: [Creator Profile]
+      summary: Remove the signed-in creator's profile image
+      description: >-
+        Removes the image and deletes the stored file; `imageUrl` becomes
+        `null`. Removing when there is no image also answers `204`. `404`
+        with `CREATOR_PROFILE_NOT_FOUND` when the caller is not a creator.
+      parameters:
+        - $ref: '#/components/parameters/CorrelationIdHeader'
+      responses:
+        '204':
+          description: The image is removed.
+          headers:
+            X-Correlation-Id:
+              $ref: '#/components/headers/CorrelationId'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '429':
           $ref: '#/components/responses/TooManyRequests'
         '500':

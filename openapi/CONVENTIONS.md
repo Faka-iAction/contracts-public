@@ -1,12 +1,18 @@
 # FAKA iAction API conventions
 
-Status: draft for review (milestone M1), contract version `1.0.0-alpha.3`. This file makes no claim about what is implemented or tested.
+Status: draft for review (milestone M1), contract version `1.0.0-alpha.5`. This file makes no claim about what is implemented or tested.
 
 These conventions apply to every operation in `faka-v1.yaml` and to every operation added later. They are written for the four backend implementations (Symfony first, then Spring Boot, ASP.NET Core and Python/FastAPI) and for API clients. A client must be able to talk to any compliant backend without changing its requests.
 
 Sources: master architecture v2.10 (approved 2026-10-13; Sections 4 to 9, 12.5.3, 13, 14, 22, 23, 28.1, 41, 43, 62.3), TIS v0.2 (Sections 6, 7.1, 8, 9, 10, 11.1), the product decisions of 2026-10-12, 2026-10-13, 2026-10-15 and 2026-10-16 (the product decision record (not published), decisions 1 to 27; decisions 17 to 27 are not yet in the approved architecture), and the state machines and domain model in `../domain/`, which are authoritative for state names and transitions. If this file and the architecture disagree, the architecture wins and this file is wrong. Where the product decisions and an earlier draft disagree, the decisions win.
 
 For shapes (fields, types, status codes), `faka-v1.yaml` is authoritative. This file is authoritative for behaviour that OpenAPI cannot express.
+
+## Changes in 1.0.0-alpha.5
+
+alpha.5 (2026-10-24) adds the creator's profile image. Nothing else changed.
+
+- **Profile image:** `putOwnCreatorImage` (`PUT /me/creator-profile/image`, the image as the request body: `image/jpeg`, `image/png` or `image/webp`, at most 5 MB) and `deleteOwnCreatorImage` (`DELETE /me/creator-profile/image`). The server redraws the image as a JPEG of at most 1024 pixels a side and serves it from its own host; `imageUrl` changes whenever the image does. Where the file is stored (local disk, Amazon S3 or Google Cloud Storage) is a deployment setting, not part of the contract.
 
 ## Changes in 1.0.0-alpha.4
 
