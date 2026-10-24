@@ -6,13 +6,18 @@ Repository: `Faka-iAction/contracts-public` (FAKA iAction platform, Contracts co
 
 ## Status
 
-Documentation only. Nothing is implemented yet. This repository does not contain any contract files yet. They are planned for publication at roadmap milestone M1.
+Published. The API contract is at version `1.0.0-alpha.4` and the Symfony API implements it. Version 1.0.0 is not yet tagged, and the conformance fixtures that every backend will run are still being written.
 
 ## Contents
 
 | File | What it covers |
 |---|---|
-| [CONTRACT_FIRST.md](CONTRACT_FIRST.md) | What contract-first means in this project, why four backends share one contract, how conformance tests will work, and when the contracts will be published. |
+| [CONTRACT_FIRST.md](CONTRACT_FIRST.md) | What contract-first means in this project, why four backends share one contract, and how conformance tests will work. |
+| [openapi/faka-v1.yaml](openapi/faka-v1.yaml) | The API specification (OpenAPI), version `1.0.0-alpha.4`. |
+| [openapi/CONVENTIONS.md](openapi/CONVENTIONS.md) | The conventions every operation follows: errors, idempotency, pagination, money. |
+| [domain/domain-model.md](domain/domain-model.md) | The entities and how they relate. |
+| [domain/state-machines.md](domain/state-machines.md) | The states of each Creator Action and Action, and of payments and settlement. |
+| [events/](events/README.md) | The event envelope and how events are described. |
 
 Related repositories:
 

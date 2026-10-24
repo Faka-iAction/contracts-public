@@ -108,13 +108,13 @@ The web pages and the API are two entry points to the same business rules in the
 
 | When | What |
 |---|---|
-| Now (milestone M0) | This explanation. |
-| Milestone M1 | The API specification and the event schemas at a tagged version, with a walkthrough of the conventions. |
+| Published now | The API specification at version `1.0.0-alpha.4` with its conventions, the domain model, the state machines and the event envelope. The Symfony API implements this version. |
+| End of milestone M1 | The same at a tagged version. |
 | Later milestones | Conformance fixtures and updates to the contract as capabilities are added, each tied to a tagged version. |
 
 The published contract is a public edition. Examples that contain private data, and fields that relate to fraud and risk controls, are left out of it by design.
 
-Until milestone M1, this repository contains no contract files. Nothing here can be used to build a client yet.
+The contract is still an alpha: it changes as capabilities are added, and no version is tagged yet.
 
 ## Further reading
 
